@@ -1,0 +1,25 @@
+{
+    "prisonTerms": ["prison", "sentenced", "incarcerated", "probation", "parole", "jail"],
+    "rawData": "rawData.tsv",
+    "processedDataPath": "fullTrainTestData.tsv",
+    "logDirectory": "logs/",
+    "baselinePositiveRate": 0.61,
+    "evalOnDataFrame": true,
+    "earlyStoppingPatience": 5,
+    
+    "kFoldTokenizedDataPath": "kFoldTokens.pkl",
+    "kFoldModelPath": "models/kFoldTrainedModel_",
+    "kFoldResultsPath": "results/",
+    "numK": 5,
+    "kFoldValSplitSize": 0.1,
+    "plotEachFold": false,
+    "makeKFoldResultJson": true,
+    
+    "tokenizedSplitDataPath": "splitTokens.pkl",
+    "tokenizedEvalDataPath": "evalTokens.pkl",
+    "evalSplitData": false,
+    "modelPath": "models/trainedModel",
+    "resultsPath": "results/",
+    "testSplitSize": 0.1,
+    "valSplitSize": 0.1
+}
