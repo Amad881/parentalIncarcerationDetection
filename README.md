@@ -28,7 +28,7 @@ For each of the following sections, you will directly modify `config.json` to ch
 ## Raw Data Processing `processData.py`
 This script converts an existing .csv/.tsv data file into a format the BERT model will accept. It shortens the raw text input into a trimmed chunk <=512 tokens long. This shortening is done while maximizing the number of relevant term matches (i.e. prison terminology).
 
-### Requirements
+### Execution
 - Script can be called using `python3 processData.py`
 - Raw data input file must be .csv or .tsv
 - Input file must have `text`, and `label` columns. 
@@ -101,7 +101,7 @@ This script has 6 main operations:
 - `interactive`
   - Loads in `{modelPathInput}` and allows the user to enter in a clinical note for evaluation. The note will automatically be trimmed according to `{prisonTerms}` before returning the predicted label and confidence. The interactive session can be escaped by entering 'q' or 'quit'
 
-Execution takes the form of `python3 trainEval.py {tokenizeSplit/tokenizeEval/train/eval/plot/interactive}` where `tokenizeSplit`, `tokenizeEval`, `train`, `eval`, `plot`, `interactive` can be independently included or omitted to acheive the desired function. If multiple flags are used, the pipeline directly passes the output of one operation to the other, otherwise the data inputs and outputs are automatically sourced according to `config.json`. For example, `python3 trainEval tokenizeSplit train eval plot` will execute the full pipleine while `python3 trainEval train interactive` will assume tokenization has already occured and gather the appropriate input data from `{tokenizedSplitDataPath}` before loading up an interactive session for live note evaluation. Likewise `python3 trainEval tokenizeEval eval plot` will source in whichever model is in `{modelPathInput}`, tokenize whichever dataset is in `{tokenizedEvalDataPath}` and output the evaluation results accordingly.
+Execution takes the form of `python3 trainEval.py {tokenizeSplit/tokenizeEval/train/eval/plot/interactive}` where `tokenizeSplit`, `tokenizeEval`, `train`, `eval`, `plot`, `interactive` can be independently included or omitted to acheive the desired function. If multiple flags are used, the pipeline directly passes the output of one operation to the other, otherwise the data inputs and outputs are automatically sourced according to `config.json`. For example, `python3 trainEval.py tokenizeSplit train eval plot` will execute the full pipleine while `python3 trainEval.py train interactive` will assume tokenization has already occured and gather the appropriate input data from `{tokenizedSplitDataPath}` before loading up an interactive session for live note evaluation. Likewise `python3 trainEval.py tokenizeEval eval plot` will source in whichever model is in `{modelPathInput}`, tokenize whichever dataset is in `{tokenizedEvalDataPath}` and output the evaluation results accordingly.
 
 ### Configuration
 The following parameters within the fourth (last) section of `config.json` are used for general training and evaluation:
