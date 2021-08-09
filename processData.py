@@ -1,12 +1,12 @@
 '''
 Description:
-This script converts an existing .csv data file into a format the BERT model will accept. 
+This script converts an existing .csv/.tsv data file into a format the BERT model will accept. 
 It shortens the raw text input into a trimmed chunk <=512 tokens long. This shortening is done while maximizing the number of relevant term matches (i.e. prison terminology)
 
 Requirements:
-Method call is of the form: python3 processData.py [inputFile.csv] [outoutFile.csv]
-Input and output files must both be .csv
-Input file must have 'text', 'label', and 'record_id' columns. The output file will have a new trainingText column
+Method call is of the form: python3 processData.py
+Input files must be .csv or .tsv
+Input file must have 'text', 'label', and 'record_id' columns. The output file will have a new trimmedText column
 '''
 import pandas as pd
 from pdb import set_trace as bp
@@ -72,7 +72,7 @@ def main():
         df = pd.read_csv(rawDataFile, sep="\t")
     else:
         df = pd.read_csv(rawDataFile)
-    df['trainingText'] = df.apply(lambda row: trimToWindow(row, configDict), axis=1)
+    df['trimmedText'] = df.apply(lambda row: trimToWindow(row, configDict), axis=1)
     df.to_csv(outputFile, sep="\t", index=False)
     return 0
 

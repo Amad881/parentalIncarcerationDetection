@@ -12,7 +12,7 @@ import sys
 import json
 
 def tokenize(batch):
-    return tokenizer(batch['trainingText'], padding=True, truncation=True, max_length=500)
+    return tokenizer(batch['trimmedText'], padding=True, truncation=True, max_length=500)
 
 def dfToDataset(df):
     ds = Dataset.from_pandas(df)
@@ -26,7 +26,7 @@ def createSplitDataset(configDict):
     tokenizer = BertTokenizer.from_pretrained("emilyalsentzer/Bio_ClinicalBERT")
     
     dataDf = pd.read_csv(configDict['processedDataPath'], sep="\t")
-    X = dataDf.trainingText
+    X = dataDf.trimmedText
     y = dataDf.label
     indices = range(len(y))
     XTrain, XTest, yTrain, yTest, idxTrain, idxTest= train_test_split(X, y, indices, test_size=configDict['testSplitSize'])
@@ -112,7 +112,7 @@ def train(configDict, tokenizedData=None):
     )
 
     trainer.train()
-    torch.save(model, configDict['modelPath'])
+    torch.save(model, configDict['modelPathOutput'])
     print("Saved model")
     return model
 
@@ -158,7 +158,7 @@ def evalModel(configDict, model=None, testData=None):
         }
     
     if model == None:
-        model = torch.load(configDict['modelPath'])
+        model = torch.load(configDict['modelPathInput'])
         model.eval()
 
     if testData == None:
