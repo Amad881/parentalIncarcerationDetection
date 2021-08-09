@@ -110,7 +110,7 @@ The following parameters within the fourth (last) section of `config.json` are u
 - `{tokenizedEvalDataPath}`
   - Where to output the evaluation tokenized data. Saved as a .pkl binary
 - `{evalSplitData}`
-  - If true, model evaluated on `{tokenizedSplitDataPath}`
+  - If true, model evaluated on `{tokenizedSplitDataPath}`, else evaluated on `{tokenizedEvalDataPath}`
 - `{modelPathOutput}`
   - Where to output the trained model
 - `{modelPathInput}`
