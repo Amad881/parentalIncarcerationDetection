@@ -10,6 +10,7 @@ from sklearn.metrics import accuracy_score, precision_recall_fscore_support, roc
 from sklearn.model_selection import train_test_split
 import sys
 import json
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def tokenize(batch):
     return tokenizer(batch['trimmedText'], padding=True, truncation=True, max_length=500)
@@ -53,7 +54,7 @@ def createEvalDataset(configDict):
     global tokenizer
     tokenizer = BertTokenizer.from_pretrained("emilyalsentzer/Bio_ClinicalBERT")
 
-    dataDf = pd.read_csv(configDict['processedDataPath'])
+    dataDf = pd.read_csv(configDict['processedDataPath'], sep='\t')
     evalDs = dfToDataset(dataDf)
     outInfo = (evalDs, dataDf)
     if configDict['tokenizedEvalDataPath'] != False:
@@ -215,6 +216,32 @@ def evalPlot(configDict, resultDict=None):
     f.savefig(configDict['resultsPath']+'resultCurve.png')
     print("Created plot")
 
+def interactive(configDict, model=None):
+    from processData import trimToWindow as trim
+
+    tokenizer = BertTokenizer.from_pretrained("emilyalsentzer/Bio_ClinicalBERT")
+    if model == None:
+        model = torch.load(configDict['modelPathInput'])
+        model = model.to(device)
+        model.eval()
+    
+    text = input("Enter your text snippet ('q' or 'quit' to exit): ")
+    while text.lower() not in {'q', 'quit'}:
+        text = trim(text, configDict)
+        tokens = tokenizer(text, padding=True, truncation=True, max_length=500, return_tensors="pt")
+        tokens = tokens.to(device)
+        logits = model(**tokens)['logits'][0].detach().cpu().numpy()
+        odds = np.exp(logits)
+        probs = odds/(1+odds)
+        bestPred = np.argmax(probs)
+        if bestPred == 0:
+            print("\nVictim of parental incarceration?: YES (Confidence=" + str(probs[bestPred]*100)[:4] + "%)")
+        else:
+            print("\nVictim of parental incarceration?: NO (Confidence=" + str(probs[bestPred]*100)[:4] + "%)")
+        text = input("\nEnter your text snippet ('q' or 'quit' to exit): ")
+    print("\nExitting interactive session...")
+    return 0
+
 def main():
     with open('config.json') as fin:
         configDict = json.load(fin)
@@ -237,6 +264,8 @@ def main():
             resultDict = evalModel(configDict, model, evalData)
         if "plot" in operationsSet:
             evalPlot(configDict, resultDict)
+        if "interactive" in operationsSet:
+            interactive(configDict, model)
 
 if __name__ == "__main__":
     main()

@@ -15,7 +15,7 @@ import pickle
 import sys
 import json
 
-def trimToWindow(row, configDict):
+def trimToWindow(text, configDict):
 
     def groupConsecutive(data, stepsize=1):
         return np.split(data, np.where(np.diff(data) != stepsize)[0]+1)
@@ -28,7 +28,6 @@ def trimToWindow(row, configDict):
     # Loads prison terms from the config file
     prisonTerms = set(configDict['prisonTerms'])
 
-    text = row['text']
     outText = text
     tokens = text.split()
     if len(tokens) > 500:
@@ -72,7 +71,7 @@ def main():
         df = pd.read_csv(rawDataFile, sep="\t")
     else:
         df = pd.read_csv(rawDataFile)
-    df['trimmedText'] = df.apply(lambda row: trimToWindow(row, configDict), axis=1)
+    df['trimmedText'] = df.apply(lambda row: trimToWindow(row['text'], configDict), axis=1)
     df.to_csv(outputFile, sep="\t", index=False)
     return 0
 
