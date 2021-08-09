@@ -99,7 +99,7 @@ This script has 6 main operations:
 - `plot`
   - Uses `{resultsPath}/resultDict.pkl` to plot the precision-recall curve over the test split. The curve is output to `{resultsPath}/resultCurve.png`
 - `interactive`
-  - Loads in `{modelPathInput}` and allows the user to enter in a clinical note for evaluation. The note will automatically be trimmed according to `{prisonTerms}` before returning the predicted label and confidence. The interactive session can be escaped by entering 'q' 
+  - Loads in `{modelPathInput}` and allows the user to enter in a clinical note for evaluation. The note will automatically be trimmed according to `{prisonTerms}` before returning the predicted label and confidence. The interactive session can be escaped by entering 'q' or 'quit'
 
 Execution takes the form of `python3 trainEval.py {tokenizeSplit/tokenizeEval/train/eval/plot/interactive}` where `tokenizeSplit`, `tokenizeEval`, `train`, `eval`, `plot`, `interactive` can be independently included or omitted to acheive the desired function. If multiple flags are used, the pipeline directly passes the output of one operation to the other, otherwise the data inputs and outputs are automatically sourced according to `config.json`. For example, `python3 trainEval tokenizeSplit train eval plot` will execute the full pipleine while `python3 trainEval train interactive` will assume tokenization has already occured and gather the appropriate input data from `{tokenizedSplitDataPath}` before loading up an interactive session for live note evaluation. Likewise `python3 trainEval tokenizeEval eval plot` will source in whichever model is in `{modelPathInput}`, tokenize whichever dataset is in `{tokenizedEvalDataPath}` and output the evaluation results accordingly.
 
