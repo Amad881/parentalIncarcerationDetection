@@ -235,9 +235,9 @@ def interactive(configDict, model=None):
         probs = odds/(1+odds)
         bestPred = np.argmax(probs)
         if bestPred == 0:
-            print("\nVictim of parental incarceration?: YES (Confidence=" + str(probs[bestPred]*100)[:4] + "%)")
-        else:
             print("\nVictim of parental incarceration?: NO (Confidence=" + str(probs[bestPred]*100)[:4] + "%)")
+        else:
+            print("\nVictim of parental incarceration?: YES (Confidence=" + str(probs[bestPred]*100)[:4] + "%)")
         text = input("\nEnter your text snippet ('q' or 'quit' to exit): ")
     print("\nExitting interactive session...")
     return 0
